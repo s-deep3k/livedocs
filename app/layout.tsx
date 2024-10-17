@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 import { Inter} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -15,8 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/** Text content does not match server-rendered HTML ERROR */}
-      <body className={cn("min-h-screen font-sans antialiased",inter.variable)}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning> {/** Text content does not match server-rendered HTML ERROR */}
+        <body className={cn("min-h-screen font-sans antialiased",inter.variable)}>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
