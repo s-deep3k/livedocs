@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
 } from '@clerk/nextjs'
 import { Inter} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { dark } from "@clerk/themes";
 const inter = Inter({ subsets: ["latin"] , variable: "--font-sans"});
 
 export const metadata: Metadata = {
@@ -22,15 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning> {/** Text content does not match server-rendered HTML ERROR */}
+    <ClerkProvider appearance={
+      { baseTheme:dark,
+        variables:{
+          fontSize:'16px',
+          colorPrimary: '#3371FF'
+        }
+      }
+    }>
+      <html lang="en" suppressHydrationWarning>{/** Text content does not match server-rendered HTML ERROR */}
         <body className={cn("min-h-screen font-sans antialiased",inter.variable)}>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           {children}
         </body>
       </html>
