@@ -1,3 +1,4 @@
+import { Room } from "@/app/Room";
 import { Editor } from "@/components/editor/Editor";
 import Header from "@/components/Header";
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
@@ -18,7 +19,9 @@ const Documents = ({params}:{params: {id:string}}) => {
             <UserButton />
           </SignedIn>
       </Header>
-      <Editor/>
+      <Room>
+        <Editor/>
+      </Room>
     </div>
   )
 }
