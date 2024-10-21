@@ -6,6 +6,7 @@ import { Inter} from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { dark } from "@clerk/themes";
+import { Provider } from "./Provider";
 const inter = Inter({ subsets: ["latin"] , variable: "--font-sans"});
 
 export const metadata: Metadata = {
@@ -29,7 +30,9 @@ export default function RootLayout({
     }>
       <html lang="en" suppressHydrationWarning>{/** Text content does not match server-rendered HTML ERROR */}
         <body className={cn("min-h-screen font-sans antialiased",inter.variable)}>
-          {children}
+          <Provider>
+            {children}
+          </Provider>
         </body>
       </html>
     </ClerkProvider>
