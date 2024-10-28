@@ -1,10 +1,12 @@
+import CollaborativeRoom from "@/components/CollaborativeRoom";
 
 
 
 const Documents = ({params}:{params: {id:string}}) => {
   const id = params.id;
   return (
-    <div>
+    <div className="flex ">
+      <CollaborativeRoom/>
     </div>
   )
 }
