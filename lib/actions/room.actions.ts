@@ -13,6 +13,8 @@ export const createDocument = async ({email, userId}:CreateDocumentParams)=>{
             title:'Untitled'
         }
         const usersAccesses:RoomAccesses = {
+            //email thaklei(account banatei hobe liveblocks) 
+            //room e access pabe and edit korbe
             [email]:["room:write"]
         }
         const room = await liveblocks.createRoom(
