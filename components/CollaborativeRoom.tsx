@@ -9,7 +9,8 @@ import ActiveCollaborators from "./ActiveCollaborators";
 
 const CollaborativeRoom = () => {
   return (
-        <RoomProvider id={'room-id'}>
+      //id = roomId where user access is required to see the room.
+        <RoomProvider id={'room-id'}> 
         <ClientSideSuspense fallback={<Loader/>}>
           <div  className='collaborative-room'>
           <Header>
