@@ -6,8 +6,12 @@ import { Editor } from "@/components/editor/Editor";
 import Header from "@/components/Header";
 import { SignedOut, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
 import ActiveCollaborators from "./ActiveCollaborators";
+import { useState } from "react";
 
-const CollaborativeRoom = () => {
+const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
+  const [documentTitle,setDocumentTitle] = useState(roomMetadata.title)
+  const [editing,setEditing] = useState(false)
+  const [loading, setLoading] = useState(false)
   return (
       //id = roomId where user access is required to see the room.
         <RoomProvider id={'room-id'}> 
