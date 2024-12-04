@@ -11,18 +11,20 @@ import { Input } from "./ui/input";
 import Image from "next/image";
 import { updateDocument } from "@/lib/actions/room.actions";
 
-const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
-  const currentUserType = 'editor'
+const CollaborativeRoom = ({roomId, roomMetadata, users, currentUserType}:CollaborativeRoomProps) => {
+  
   const [documentTitle,setDocumentTitle] = useState(roomMetadata.title)
   const [editing,setEditing] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const updateTitleHandler = async(event:React.KeyboardEvent<HTMLInputElement>)=>{
     
-    if(event.key ==='Enter')setLoading(true)
+    if(event.key ==='Enter'){
+      setLoading(true)
+    }
     try {
       if(documentTitle!==roomMetadata.title)
       {
@@ -36,15 +38,16 @@ const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
 
   useEffect(()=>{
     const handleOutsideClick= (e:MouseEvent)=>{
+      setLoading(true)
       if(containerRef.current && !containerRef.current.contains(e.target as Node))
         { //await?
           updateDocument(roomId,documentTitle)
-          setEditing(false)
-
+          setLoading(false)
+          setEditing(false)      
         }
+      }
       document.addEventListener("mousedown", handleOutsideClick)
-    }
-    return ()=>{
+      return ()=>{
       document.removeEventListener("mousedown",handleOutsideClick)
     }
   },[roomId,documentTitle])
@@ -66,12 +69,13 @@ const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
             {editing && !loading ?
             <Input 
             type="text"
-            //ref={inputRef}
+            ref={inputRef}
             value={documentTitle}
             placeholder="Enter title..."
             onChange={e=> setDocumentTitle(e.target.value)}
             onKeyDown={updateTitleHandler}
             disabled={!editing}
+            className="document-title-input"
             />:<>
               <p className="document-title">{documentTitle}</p>
             </>
@@ -90,7 +94,7 @@ const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
               <p className="view-only-tag">View Only</p>
             )}
             {loading && <p className="text-sm text-gray-400">saving...</p>}
-            <div className="w-full flex-1 justify-end gap-2 sm:gap-3">
+            <div className="w-full flex flex-1 justify-end gap-2 sm:gap-3">
               <ActiveCollaborators/>
 
               <SignedOut>
@@ -102,7 +106,7 @@ const CollaborativeRoom = ({roomId, roomMetadata}:CollaborativeRoomProps) => {
             </div>
             
           </Header>
-            <Editor/>
+            <Editor roomId={roomId} currentUserType={currentUserType}/>
             </div>
          
          </ClientSideSuspense>

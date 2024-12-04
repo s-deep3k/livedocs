@@ -22,7 +22,7 @@ function Placeholder() {
   return <div className="editor-placeholder">Enter some rich text...</div>;
 }
 
-export function Editor() {
+export function Editor({currentUserType, roomId}:{currentUserType:string, roomId:string}) {
   const initialConfig = liveblocksConfig({
     namespace: 'Editor',
     nodes: [HeadingNode],
@@ -31,6 +31,7 @@ export function Editor() {
       throw error;
     },
     theme: Theme,
+    editable: currentUserType==='editor' // enables editing inside room else only view
   });
 
   return (
