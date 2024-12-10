@@ -22,11 +22,11 @@ const Documents = async({params:{id}}:SearchParamProps) => {
   //checks users' accesses
   const usersData = users.map((user:User)=>({
     ...user,
-    userType: room.userAccesses[user.email]?.includes('room:write')?'editor':'viewer'
+    userType: room.usersAccesses[user.email]?.includes('room:write')?'editor':'viewer'
   }))
 
   const currentUserType = room
-  .userAccesses[clerkUser.emailAddresses[0].emailAddress]
+  .usersAccesses[clerkUser.emailAddresses[0].emailAddress]
   ?.includes('room:write')?
   'editor'
   :'viewer'
