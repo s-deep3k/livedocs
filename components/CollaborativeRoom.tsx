@@ -10,8 +10,9 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "./ui/input";
 import Image from "next/image";
 import { updateDocument } from "@/lib/actions/room.actions";
+import ShareModal from "./ShareModal";
 
-const CollaborativeRoom = ({roomId, roomMetadata, users, currentUserType}:CollaborativeRoomProps) => {
+const CollaborativeRoom = ({roomId, roomMetadata,users, currentUserType}:CollaborativeRoomProps) => {
   
   const [documentTitle,setDocumentTitle] = useState(roomMetadata.title)
   const [editing,setEditing] = useState(false)
@@ -62,7 +63,7 @@ const CollaborativeRoom = ({roomId, roomMetadata, users, currentUserType}:Collab
       //id = roomId where user access is required to see the room.
         <RoomProvider id={roomId}> 
         <ClientSideSuspense fallback={<Loader/>}>
-          <div  className='collaborative-room'>
+          <div className='collaborative-room'>
           <Header>
             
             <div ref={containerRef} className="flex w-fit justify-center items-center gap-2">
@@ -96,7 +97,12 @@ const CollaborativeRoom = ({roomId, roomMetadata, users, currentUserType}:Collab
             {loading && <p className="text-sm text-gray-400">saving...</p>}
             <div className="w-full flex flex-1 justify-end gap-2 sm:gap-3">
               <ActiveCollaborators/>
-
+              <ShareModal 
+              roomId={roomId}
+              currentUserType={currentUserType}
+              collaborators={users}
+              creatorId={roomMetadata.creatorId}
+              />
               <SignedOut>
                 <SignInButton />
             </SignedOut>
