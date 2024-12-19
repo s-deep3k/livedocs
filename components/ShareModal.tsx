@@ -24,6 +24,8 @@ const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: Share
                     src='/assets/icons/share.svg'
                     alt="share"
                     className="min-w-4 md:size-5"
+                    width={20}
+                    height={20}
                     />
                     <p className="mr-1 hidden sm:block">Share</p>
                 </Button>
