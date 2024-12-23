@@ -6,6 +6,8 @@ import Image from "next/image"
 import { Button } from "./ui/button"
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
+import UserTypeSelector from "./UserTypeSelector"
+import Collaborator from "./Collaborator"
 
 
 const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: ShareDocumentDialogProps) => {
@@ -13,9 +15,10 @@ const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: Share
     const [open, setOpen] = useState(false)
     const [loading, setsetLoading] = useState(false)
 
-    const [userType, setUserType] = useState('viewer')
+    const [userType, setUserType] = useState('viewer' as UserType)
     const [email, setEmail] = useState('')
 
+    const shareDocumentHandler = async ()=>{}
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
@@ -50,7 +53,19 @@ const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: Share
                         onChange={(e)=>setEmail(e.target.value)}
                         className="share-input"
                         />
-                        {/* <UserTypeSelector/> */}
+                        <UserTypeSelector userType={userType} setUserType={setUserType}/> 
+                    </div>
+                    <Button type="submit" onClick={shareDocumentHandler}
+                    className="gradient-blue flex h-full gap-1 px-5" disabled={loading}
+                    >
+                    {loading ? 'Sending...':'Invite'}
+                    </Button>
+                </div>
+                <div className="my-2 space-y-2">
+                    <div className="flex flex-col">
+                        {collaborators.map(collaborator=>(
+                            <Collaborator roomId={roomId} creatorId={creatorId} user={user} email={email} collaborator={collaborator}/>
+                        ))}
                     </div>
                 </div>
             </DialogContent>
