@@ -1,3 +1,5 @@
+'use client';
+
 import { useSelf } from "@liveblocks/react/suspense"
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "@radix-ui/react-dialog"
 import { useState } from "react"
@@ -8,17 +10,27 @@ import { Label } from "./ui/label"
 import { Input } from "./ui/input"
 import UserTypeSelector from "./UserTypeSelector"
 import Collaborator from "./Collaborator"
+import { updateDocumentAccess } from "@/lib/actions/room.actions"
 
 
 const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: ShareDocumentDialogProps) => {
     const user = useSelf()
     const [open, setOpen] = useState(false)
-    const [loading, setsetLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const [userType, setUserType] = useState('viewer' as UserType)
     const [email, setEmail] = useState('')
 
-    const shareDocumentHandler = async ()=>{}
+    const shareDocumentHandler = async ()=>{
+        setLoading(true)
+        await updateDocumentAccess({
+            roomId,
+            email,
+            userType,
+            updatedBy : user.info as User
+        })
+        setLoading(false)
+    }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
@@ -64,7 +76,7 @@ const ShareModal = ({ roomId, creatorId, currentUserType, collaborators }: Share
                 <div className="my-2 space-y-2">
                     <div className="flex flex-col">
                         {collaborators.map(collaborator=>(
-                            <Collaborator roomId={roomId} creatorId={creatorId} user={user} email={email} collaborator={collaborator}/>
+                            <Collaborator roomId={roomId} creatorId={creatorId} user={user.info as User} email={email} collaborator={collaborator}/>
                         ))}
                     </div>
                 </div>
