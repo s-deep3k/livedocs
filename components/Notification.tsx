@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useState } from "react";
-import { InboxNotificationList, LiveblocksUIConfig } from "@liveblocks/react-ui";
+import { InboxNotification, InboxNotificationList, LiveblocksUIConfig } from "@liveblocks/react-ui";
+import { useInboxNotifications, useUnreadInboxNotificationsCount } from "@liveblocks/react/suspense";
 
 
 const Notification = () => {
-    const unreadNotifications =[]
-    const [count, setCount]= useState(0)
+    const {inboxNotifications} = useInboxNotifications()
+    const {count} = useUnreadInboxNotificationsCount()
+
+    const unreadNotifications = inboxNotifications.filter(notification=>!notification.readAt)
   return (
     <Popover>
         <PopoverTrigger className="relative flex size-10 items-center justify-center 
@@ -30,10 +32,52 @@ const Notification = () => {
             )
         }}
             >
-                <InboxNotificationList/>
+                <InboxNotificationList>
                 {unreadNotifications.length <=0 && (
                     <p className="py-2 text-center text-dark-500">No new notifications</p>
                 ) }
+
+                {unreadNotifications.length>0 && unreadNotifications
+                .map(notification=>(
+                    <InboxNotification
+                    key={notification.id}
+                    inboxNotification={notification}
+                    className="bg-dark-200 text-white"
+                    href={`/documents/${notification.roomId}`}
+                    showActions={false}
+                    kinds={{
+                        thread:(props)=>(
+                            <InboxNotification.Thread {...props}
+                            showActions={false}
+                            showRoomName={false}
+                            />
+                        ),
+                        textMention:(props)=>(
+                            <InboxNotification.TextMention {...props}
+                            showActions={false}
+                            showRoomName={false}
+                            />  
+                        ),
+                        $documentAccess:(props)=>(
+                            <InboxNotification.Custom {...props} title={props.inboxNotification.activities[0].data.title}
+                            aside={
+                                <InboxNotification.Icon className="bg-transparent">
+                                    <Image src={props.inboxNotification.activities[0].data.avatar as string || ''}
+                                    width={26}
+                                    height={26}
+                                    alt={'avatar'}
+                                    className="rounded-full"
+                                    />
+                                </InboxNotification.Icon>
+                            }
+                            >
+                                {props.children}
+                            </InboxNotification.Custom>
+                        )
+                    }}
+                    ></InboxNotification>
+                ))}
+                </InboxNotificationList>
             </LiveblocksUIConfig>
         </PopoverContent>
     </Popover>

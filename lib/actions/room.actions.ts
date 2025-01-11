@@ -5,6 +5,7 @@ import { liveblocks } from "../liveblocks"
 import {nanoid} from 'nanoid'
 import { getAccessType, parseStringify } from "../utils";
 import { redirect } from "next/navigation";
+import { title } from "process";
 export const createDocument = async ({email, userId}:CreateDocumentParams)=>{
     try {
         const roomId = nanoid()
@@ -86,7 +87,18 @@ export const updateDocumentAccess = async ({roomId, email, userType, updatedBy}:
         const room = await liveblocks.updateRoom(roomId,{
             usersAccesses 
         })
-        if(room)
+        if(room){
+            const notificationId = nanoid()
+            await liveblocks.triggerInboxNotification({
+                userId:email,
+                kind:'$documentAccess',
+                subjectId: notificationId,
+                activityData:{
+                    userType,
+                    title
+                }
+            })
+        }
             // TODO: Send notification
         revalidatePath(`/documents/${roomId}`)
         return parseStringify(room)
