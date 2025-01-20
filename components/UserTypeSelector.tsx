@@ -1,4 +1,4 @@
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select"
 
 const UserTypeSelector = ({userType,setUserType, onClickHandler}:UserTypeSelectorParams) => {
     return (

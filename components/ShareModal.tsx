@@ -1,7 +1,7 @@
 'use client';
 
 import { useSelf } from "@liveblocks/react/suspense"
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "@radix-ui/react-dialog"
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "./ui/dialog"
 import { useState } from "react"
 import { DialogHeader } from "./ui/dialog"
 import Image from "next/image"
